@@ -42,7 +42,6 @@ foreach ($rows as $index => $row) {
 	}
 }
 
-if ($sortBy == "n") { } // file is already sorted in this manner
 if ($sortBy == "s") { 
     easyArraySort($sivaArray, 'SIVATerminal', $dir);
 }
@@ -65,7 +64,6 @@ foreach ($sivaArray as $dataArray) {
     $sort1 = $orderArray["1"] ? $orderArray["1"] : "a";
     $sort2 = $orderArray["2"] ? $orderArray["2"] : "a";
     $sort3 = $orderArray["3"] ? $orderArray["3"] : "a";
-    $sortR = $orderArray["r"] ? $orderArray["r"] : "a";
 
     $outputHTML .= '<tr><td class="solution ' . $cssColor . '" data-terminal="' . $sivaTerminal . '" data-completesolution="' . $completeSolution . '">' . $sivaTerminal . '</td><td class="solution" data-terminal="' . $sivaTerminal . '" data-completesolution="' . $completeSolution . '">' . $terminal[1] .'</td><td class="solution" data-terminal="' . $sivaTerminal . '" data-completesolution="' . $completeSolution . '">' . $terminal[2] .'</td><td class="solution" data-terminal="' . $sivaTerminal . '" data-completesolution="' . $completeSolution . '">' . $terminal[3] .'</td></tr>';
 }
