@@ -74,7 +74,7 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 		table.inputPanel { background-image: url('./images/sivaTerminalsComplete.png'); border-spacing: 0px; }
 		table.inputPanel td { width: 22px; height: 22px; text-align: center; padding: 0px; margin: 0px; }
 		.clickable { cursor: pointer; color: white; color: rgba(0, 0, 0, 0.0); }
-		.solution { cursor: pointer; }
+		.solution, .orderby { cursor: pointer; }
 
 		.createdDiv { background-color: green; margin: 0px; padding: 0px; }
 		.sivaChecker, .sivaSolution, .sivaCSV { background-color: #1a3e5e; }
