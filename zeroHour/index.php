@@ -77,9 +77,13 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 		.solution { cursor: pointer; }
 
 		.createdDiv { background-color: green; margin: 0px; padding: 0px; }
-		.sivaChecker, .sivaSolution { background-color: #1a3e5e; }
-		.sivaChecker td, .sivaSolution td {  border: 1px solid black; }
+		.sivaChecker, .sivaSolution, .sivaCSV { background-color: #1a3e5e; }
+		.sivaCSV { font-size: 12px; }
+		.sivaChecker td, .sivaSolution td, .sivaCSV td {  border: 1px solid black; }
 		.sivaSolution { position: absolute; top: 0px; left: 1050px; font-size: 12px; }
+
+		#csvTable { position: absolute; top: 0px; left: 1250px; }
+		#csvTable td { text-align: right; }
 	</style>
 </head>
 		
@@ -101,6 +105,7 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 			<div class="right"><?= $inputPanelHTML; ?></div>
 		</div>
 		<?= $solutionTable; ?>
+		<div id="csvTable"></div>
 	</div>
 	<div id="vars" data-flashing="0" data-week="" data-terminal="" data-oldterminal="" data-solutionnumber="0"></div>
 </body>
@@ -129,6 +134,9 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 	
 	$(document).ready(function(){
 		$.get('./endpoints/getCurrentWeek.php', function(weekType) { $("#vars").data("week", weekType) }) // returns solar, arc or void
+		$.get('./endpoints/showCSV.php?sortby=1&order=a', function(response) {
+			$('#csvTable').html(response);
+		})
 		loadDivMap();
 		$("#container").on( "mouseenter", ".clickable", function() { // animate siva output terminals
 			offset = parseInt($(this).html()) * 134;
@@ -178,7 +186,6 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 								solutionString += solutionHTML + ",";
 							}
 						})
-						console.log(solutionString);
 						$('.solution').each( function() {
 							completeSolution = $(this).data('completesolution');
 							if (completeSolution!='') {
@@ -200,7 +207,6 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 			cssColor = solutionTerminal.substr(0, solutionTerminal.length-1).toLowerCase();
 			solutionNumber = parseInt($('#vars').data('solutionnumber')) + 1;
 			$('.solution').each ( function() {
-				console.log(solution)
 				if ($(this).data('completesolution') == solution) { $(this).fadeOut(1); }
 			})
 			$("#solution" + solutionNumber).html(solutionTerminal + " (" + solution + ")").addClass(cssColor);
@@ -214,6 +220,30 @@ $inputPanelHTML = '<table class="inputPanel">' . $inputPanelHTML . '</table>';
 				$('#vars').data('terminal','');
 			}
 			$('#vars').data('terminal', divName).data('flashing', 1);
+		})
+
+		$("#container").on( "click", ".orderby", function() {
+			order = $(this).data('sortby');
+			terminalName = $(this).data('terminal');
+			solutionsArray = [];
+			$.get('./endpoints/showCSV.php?sortby=' + terminalName + '&order=' + order, function(response) {
+				$('.sivaCSV').replaceWith(response);
+				$('.solutionTable').each( function() {
+					solution = $(this).html();
+					if (solution!="") {
+						solutionArray = solution.replace(')','').split('(');
+						solutionsArray.push(solutionArray[1]);
+					}
+				})
+				$(solutionsArray).each( function() {
+					currentSolution = this;
+					$('.solution').each( function() {
+						if ($(this).data('completesolution')==currentSolution) {
+							$(this).fadeOut(1);
+						}
+					})
+				})
+			})
 		})
     })
 
